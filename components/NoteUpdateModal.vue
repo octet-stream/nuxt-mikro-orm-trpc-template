@@ -1,0 +1,44 @@
+<script setup lang="ts">
+import {Pencil} from "lucide-vue-next"
+
+import type {ONoteOutput} from "~/server/trpc/type/note/NoteOutput.js"
+import type {SubmitHandler} from "~/components/NoteEditModal.vue"
+
+interface Props {
+  id: string
+  title: string
+  content?: string
+  completed: boolean
+}
+
+export type OnUpdateHandler = (note: ONoteOutput) => void
+
+const {$trpc} = useNuxtApp()
+
+const props = defineProps<Props>()
+const emit = defineEmits<{
+  (
+    event: "updated",
+
+    ...args: Parameters<OnUpdateHandler>
+  ): ReturnType<OnUpdateHandler>
+}>()
+
+const submit: SubmitHandler = async data => {
+  emit("updated", await $trpc.note.update.mutate({...data, id: props.id}))
+}
+</script>
+
+<template>
+  <NoteEditModal @submit="submit" :initialValues="$props">
+    <template #title>
+      Create a note
+    </template>
+
+    <template #openButton="{openDialog}">
+      <button type="button" aria-label="Edit the note" @click="openDialog">
+        <Pencil :size="28" />
+      </button>
+    </template>
+  </NoteEditModal>
+</template>
