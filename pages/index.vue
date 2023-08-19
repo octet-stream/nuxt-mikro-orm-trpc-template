@@ -6,7 +6,17 @@ const {$trpc} = useNuxtApp()
 const notes = reactive(await $trpc.notes.list.query())
 
 const addNote = (note: ONoteOutput): void => {
-  notes.items.push(note)
+  notes.items.unshift(note)
+
+  const {maxLimit, itemsCount, nextCursor} = notes
+  if (maxLimit && maxLimit < itemsCount + 1) {
+    notes.items.pop()
+    notes.nextCursor = nextCursor ? nextCursor + 1 : 1
+  } else {
+    notes.hasItems = true
+    notes.itemsCount++
+    notes.rowsCount++
+  }
 }
 </script>
 

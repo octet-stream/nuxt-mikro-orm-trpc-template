@@ -11,8 +11,9 @@ export const list = procedure
     const [items, count] = await orm.em.findAndCount(Note, {}, {
       limit: args.limit,
       offset: args.offset,
+      fields: ["id", "title", "completed", "createdAt", "updatedAt"],
       orderBy: {
-        createdAt: "asc"
+        createdAt: "desc"
       }
     })
 
