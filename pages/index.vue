@@ -6,16 +6,23 @@ const {$trpc} = useNuxtApp()
 const notes = reactive(await $trpc.notes.list.query())
 
 const addNote = (note: ONoteOutput): void => {
-  notes.push(note)
+  notes.items.push(note)
 }
 </script>
 
 <template>
-  <ul>
-    <li v-for="note of notes" :key="note.id" class="py-1 first:pt-0 last:pb-0">
+  <ul v-if="notes.hasItems">
+    <li v-for="note of notes.items" :key="note.id" class="py-1 first:pt-0 last:pb-0">
       <NoteListCard v-bind="note" />
     </li>
   </ul>
+
+  <div v-else class="w-full h-full flex justify-center items-center select-none">
+    <div class="border rounded-md text-gray-400 border-gray-400 dark:text-slate-500 dark:border-slate-500 p-5 text-center">
+      <div>There are no notes just yet</div>
+      <div>To add one, click on the button down below</div>
+    </div>
+  </div>
 
   <NoteCreateModal @created="addNote" />
 </template>

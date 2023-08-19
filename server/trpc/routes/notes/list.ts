@@ -1,9 +1,20 @@
-import {z} from "zod"
+import {NotesPageInput} from "../../type/note/NotesPageInput.js"
+import {NotePageOutput} from "../../type/note/NotePageOutput.js"
+import {procedure} from "../../procedure/base.js"
 
-import {procedure} from "~/server/trpc/procedure/base.js"
-import {NoteBase} from "~/server/trpc/type/note/NoteBase.js"
-import {Note} from "~/server/db/entity/Note.js"
+import {Note} from "../../../db/entity/Note.js"
 
 export const list = procedure
-  .output(z.array(NoteBase))
-  .query(({ctx: {orm}}) => orm.em.find(Note, {}))
+  .input(NotesPageInput)
+  .output(NotePageOutput)
+  .query(async ({input: {args}, ctx: {orm}}) => {
+    const [items, count] = await orm.em.findAndCount(Note, {}, {
+      limit: args.limit,
+      offset: args.offset,
+      orderBy: {
+        createdAt: "asc"
+      }
+    })
+
+    return {items, count, args}
+  })
