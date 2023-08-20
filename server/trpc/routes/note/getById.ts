@@ -10,7 +10,10 @@ export const getById = procedure
   .output(NoteOutput)
   .query(async ({input, ctx: {orm}}) => {
     const note = await orm.em.findOneOrFail(Note, input.id, {
-      failHandler: () => new TRPCError({code: "NOT_FOUND"})
+      failHandler: () => new TRPCError({
+        code: "NOT_FOUND",
+        message: "Unable to find requested note"
+      })
     })
 
     return note

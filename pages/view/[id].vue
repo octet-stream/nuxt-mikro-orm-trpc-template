@@ -2,11 +2,13 @@
 import type {ONoteOutput} from "~/server/trpc/type/note/NoteOutput.js"
 import type {OnUpdateHandler} from "~/components/NoteUpdateModal.vue"
 
+import {getNoteById} from "../../api/getNoteById.js"
+
 const route = useRoute()
 
 const {$trpc} = useNuxtApp()
 
-const note = reactive(await $trpc.note.getById.query({id: String(route.params.id)}))
+const note = reactive(await getNoteById({id: String(route.params.id)}))
 
 useHead({
   title: note.title
