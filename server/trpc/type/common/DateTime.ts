@@ -9,6 +9,7 @@ import {parseISO, toDate} from "date-fns"
 export const DateTime = z
   .union([z.date(), z.string(), z.number()])
   .transform<Date>(date => isString(date) ? parseISO(date) : toDate(date))
+  .transform<string>(date => date.toISOString())
 
 export type IDateTime = input<typeof DateTime>
 

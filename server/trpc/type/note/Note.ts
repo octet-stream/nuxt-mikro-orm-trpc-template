@@ -1,9 +1,10 @@
 import {z} from "zod"
 
-import {NoteBase} from "./NoteBase"
+import {NoteBaseNode} from "./NoteBaseNode.js"
+import {NoteContent} from "./NoteContent.js"
 
-export const Note = NoteBase.extend({
-  content: z.string().nullish().transform(value => value == null ? undefined : value)
+export const Note = NoteBaseNode.extend({
+  content: NoteContent
 })
 
 export type INote = z.input<typeof Note>

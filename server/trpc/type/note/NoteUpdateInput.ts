@@ -1,6 +1,6 @@
 import {z} from "zod"
 
-import {Note} from "./Note"
+import {Note} from "./Note.js"
 
 export const NoteUpdateInput = Note.partial().required({id: true})
 

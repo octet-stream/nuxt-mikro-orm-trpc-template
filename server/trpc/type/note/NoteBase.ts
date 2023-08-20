@@ -1,8 +1,6 @@
 import {z} from "zod"
 
-import {Node} from "~/server/trpc/type/common/Node"
-
-export const NoteBase = Node.extend({
+export const NoteBase = z.object({
   title: z.string().nonempty(),
   completed: z.boolean().default(false)
 })

@@ -1,10 +1,9 @@
 import {z} from "zod"
 
-import {Record} from "~/server/trpc/type/common/Record"
+import {NoteBaseRecord} from "./NoteBaseRecord.js"
+import {Note} from "./Note.js"
 
-import {Note} from "./Note"
-
-export const NoteOutput = Record.extend(Note.shape)
+export const NoteOutput = NoteBaseRecord.extend(Note.shape)
 
 export type INoteOutput = z.input<typeof NoteOutput>
 
