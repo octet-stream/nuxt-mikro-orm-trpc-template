@@ -9,7 +9,26 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const noteUrl = `/view/${props.id}`
+const {$trpc} = useNuxtApp()
+
+const noteUrl = computed(() => `/view/${props.id}`)
+
+const emit = defineEmits<{
+  (e: "update:completed", completed: boolean): void
+}>()
+
+async function toggleCompleted() {
+  try {
+    const {completed} = await $trpc.note.update.mutate({
+      id: props.id,
+      completed: !props.completed
+    })
+
+    emit("update:completed", completed)
+  } catch (error) {
+    console.error(error)
+  }
+}
 </script>
 
 <template>
@@ -18,6 +37,7 @@ const noteUrl = `/view/${props.id}`
 
     <div class="pl-4 pr-1 relative flex justify-center items-center pointer-events-none">
       <button
+        @click="toggleCompleted"
         :class='[
           "relative z-0 cursor-pointer w-6 h-6 flex items-center justify-center rounded-full border disabled:cursor-not-allowed pointer-events-auto",
 

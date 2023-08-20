@@ -23,7 +23,7 @@ const addNote = (note: ONoteOutput): void => {
 <template>
   <ul v-if="notes.hasItems">
     <li v-for="note of notes.items" :key="note.id" class="py-1 first:pt-0 last:pb-0">
-      <NoteListCard v-bind="note" />
+      <NoteListCard v-bind="note" v-model:completed="note.completed" />
     </li>
   </ul>
 
