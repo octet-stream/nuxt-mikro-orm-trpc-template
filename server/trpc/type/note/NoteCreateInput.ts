@@ -1,8 +1,8 @@
 import {z} from "zod"
 
-import {NoteBase} from "./NoteBase.js"
+import {Note} from "./Note.js"
 
-export const NoteCreateInput = NoteBase.partial({completed: true})
+export const NoteCreateInput = Note.partial({completed: true}).omit({id: true})
 
 export type INoteCreateInput = z.input<typeof NoteCreateInput>
 
