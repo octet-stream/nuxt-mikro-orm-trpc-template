@@ -1,9 +1,10 @@
 import {TRPCError} from "@trpc/server"
 
-import {NoteOutput} from "~/server/trpc/type/note/NoteOutput.js"
-import {procedure} from "~/server/trpc/procedure/base.js"
-import {Node} from "~/server/trpc/type/common/Node.js"
-import {Note} from "~/server/db/entity/Note.js"
+import {NoteOutput} from "../../type/note/NoteOutput.js"
+import {procedure} from "../../procedure/base.js"
+import {Node} from "../../type/common/Node.js"
+
+import {Note} from "../../../db/entity/Note.js"
 
 export const getById = procedure
   .input(Node)

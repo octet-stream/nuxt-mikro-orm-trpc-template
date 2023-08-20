@@ -1,4 +1,4 @@
-import {router} from "~/server/trpc/def.js"
+import {router} from "../def.js"
 
 import {list} from "./notes/list.js"
 

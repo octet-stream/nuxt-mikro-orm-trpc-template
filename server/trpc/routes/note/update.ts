@@ -1,10 +1,11 @@
 import {TRPCError} from "@trpc/server"
 import {wrap} from "@mikro-orm/core"
 
-import {NoteUpdateInput} from "~/server/trpc/type/note/NoteUpdateInput.js"
-import {NoteOutput} from "~/server/trpc/type/note/NoteOutput.js"
-import {procedure} from "~/server/trpc/procedure/base.js"
-import {Note} from "~/server/db/entity/Note.js"
+import {NoteUpdateInput} from "../../type/note/NoteUpdateInput.js"
+import {NoteOutput} from "../../type/note/NoteOutput.js"
+import {procedure} from "../../procedure/base.js"
+
+import {Note} from "../../../db/entity/Note.js"
 
 export const update = procedure
   .input(NoteUpdateInput)

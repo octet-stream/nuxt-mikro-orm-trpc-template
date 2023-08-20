@@ -1,4 +1,4 @@
-import {router} from "~/server/trpc/def.js"
+import {router} from "../def.js"
 
 import {getById} from "./note/getById.js"
 import {create} from "./note/create.js"

@@ -1,7 +1,8 @@
-import {Note} from "~/server/db/entity/Note"
-import {procedure} from "~/server/trpc/procedure/base"
-import {NoteOutput} from "~/server/trpc/type/note/NoteOutput"
-import {NoteCreateInput} from "~/server/trpc/type/note/NoteCreateInput"
+import {NoteCreateInput} from "../../type/note/NoteCreateInput.js"
+import {NoteOutput} from "../../type/note/NoteOutput.js"
+import {procedure} from "../../procedure/base.js"
+
+import {Note} from "../../../db/entity/Note.js"
 
 export const create = procedure
   .input(NoteCreateInput)
