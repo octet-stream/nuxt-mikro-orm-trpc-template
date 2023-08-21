@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import {ArrowLeft} from "lucide-vue-next"
 import {unified} from "unified"
-import {omit} from "lodash-es"
 
 import remark from "remark-parse"
 import rehype from "remark-rehype"
 import sanitize from "rehype-sanitize"
 import stringify from "rehype-stringify"
 
-import type {ToggleCompletedHanlder} from "~/components/NoteCompleteButton.vue"
 import type {OnUpdateHandler} from "~/components/NoteUpdateModal.vue"
 
 const parser = unified()
@@ -22,13 +20,12 @@ interface Props {
   title: string
   content?: string
   completed: boolean
-  toggleCompleted: ToggleCompletedHanlder
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
   (
-    event: "updated",
+    e: "updated",
 
     ...args: Parameters<OnUpdateHandler>
   ): ReturnType<OnUpdateHandler>
@@ -36,9 +33,9 @@ const emit = defineEmits<{
 
 const updated: OnUpdateHandler = note => emit("updated", note)
 
-const html = computed(
-  () => props.content ? parser.processSync(props.content) : undefined
-)
+const toggleCompleted = (
+  completed: boolean
+) => emit("updated", {id: props.id, completed})
 </script>
 
 <template>
@@ -50,7 +47,7 @@ const html = computed(
 
       <div class="flex-1" />
 
-      <NoteUpdateModal v-bind="omit($props, 'toggleCompleted')" @updated="updated" />
+      <NoteUpdateModal v-bind="$props" @updated="updated" />
     </nav>
 
     <div class="w-full">
@@ -59,14 +56,10 @@ const html = computed(
       </h2>
 
       <div class="mb-10">
-        <div v-if="html" class="prose dark:prose-invert" v-html="html" />
-
-        <div v-else class="text-gray-400 dark:text-gray-600">
-          No details
-        </div>
+        <slot />
       </div>
 
-      <NoteCompleteButton :completed="completed" :toggle-completed="toggleCompleted">
+      <NoteCompleteButton :noteId="id" :completed="completed" @click="toggleCompleted">
         Mark as completed
       </NoteCompleteButton>
     </div>

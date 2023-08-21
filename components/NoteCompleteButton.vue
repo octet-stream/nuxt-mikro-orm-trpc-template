@@ -1,20 +1,32 @@
 <script setup lang="ts">
 import {Check, CheckCheck} from "lucide-vue-next"
 
-import type {MaybePromise} from "lib/util/type/MaybePromise"
-
-export type ToggleCompletedHanlder = (completed: boolean) => MaybePromise<void>
-
 interface Props {
+  noteId: string
   completed: boolean
-  toggleCompleted: ToggleCompletedHanlder
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<{
+  (e: "click", completed: boolean): void
+}>()
+
+const {$trpc} = useNuxtApp()
+
+const toggle = async (): Promise<void> => {
+  try {
+    const {completed} = await $trpc.note.update.mutate({
+      id: props.noteId,
+      completed: !props.completed
+    })
+
+    emit("click", completed)
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 const Icon = computed(() => props.completed ? CheckCheck : Check)
-
-const toggle = () => props.toggleCompleted(!props.completed)
 </script>
 
 <template>
@@ -39,7 +51,7 @@ const toggle = () => props.toggleCompleted(!props.completed)
       />
 
       <div :class='["ml-2", {"line-through text-gray-300 dark:text-gray-500": completed}]'>
-        <slot /> {{ completed }}
+        <slot />
       </div>
     </div>
   </button>

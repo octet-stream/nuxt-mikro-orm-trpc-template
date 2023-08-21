@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {Pencil} from "lucide-vue-next"
 
-import type {ONoteOutput} from "~/server/trpc/type/note/NoteOutput.js"
+import type {ONoteUpdateInput} from "~/server/trpc/type/note/NoteUpdateInput.js"
 import type {SubmitHandler} from "~/components/NoteEditModal.vue"
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
   completed: boolean
 }
 
-export type OnUpdateHandler = (note: ONoteOutput) => void
+export type OnUpdateHandler = (note: ONoteUpdateInput) => void
 
 const {$trpc} = useNuxtApp()
 
@@ -30,7 +30,7 @@ const submit: SubmitHandler = async data => {
 </script>
 
 <template>
-  <NoteEditModal @submit="submit" :initialValues="$props">
+  <NoteEditModal @submit="submit" :initialValues="{title, content, completed}">
     <template #title>
       Create a note
     </template>
