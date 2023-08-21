@@ -11,12 +11,14 @@ import {useTextareadAutoResize} from "~/lib/composables/useTextareaAutoresize.js
 
 import Modal from "~/components/Modal.vue"
 
+interface InitialValues {
+  title?: string
+  content?: string
+  completed?: boolean
+}
+
 interface Props {
-  initialValues?: {
-    title?: string
-    content?: string
-    completed?: boolean
-  }
+  initialValues?: InitialValues
 }
 
 export type SubmitHandler = (data: ONoteCreateInput) => MaybePromise<void>
@@ -34,21 +36,24 @@ function closeModal(): void {
   modalRef.value?.close()
 }
 
+const normalizeInitialValues = (
+  values?: InitialValues
+): Required<InitialValues> => ({
+  title: values?.title ?? "",
+  completed: values?.completed ?? false,
+  content: values?.content ?? ""
+})
+
 const {initialValues} = props
-const {handleSubmit, register, errors, resetForm} = useForm<ONoteCreateInput>({
+const {handleSubmit, register, errors, setValues} = useForm<ONoteCreateInput>({
   validateMode: "input",
   reValidateMode: "input",
   validateOnMounted: true,
-  initialValues: {
-    title: initialValues?.title ?? "",
-    completed: initialValues?.completed,
-    content: initialValues?.content
-  },
+  initialValues: normalizeInitialValues(initialValues),
   validate: zodResolver(NoteCreateInput),
   onSubmit: data => Promise
     .resolve(emit("submit", data))
     .then(() => { closeModal() })
-    .then(() => { setTimeout(resetForm, 210) })
 })
 
 const {value: titleValue, attrs: titleAttrs} = register("title")
@@ -65,6 +70,10 @@ const {ref: titleAutoSize} = useTextareadAutoResize({
 const {ref: contentAutoSize} = useTextareadAutoResize({
   watch: contentValue,
   maxRows: 10
+})
+
+watch(() => props.initialValues, values => {
+  setValues(normalizeInitialValues(values))
 })
 </script>
 
